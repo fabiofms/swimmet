@@ -1,0 +1,150 @@
+<definitions name = "SwimMet"
+   targetNamespace = "http://127.0.0.1:8001/wsdl"
+   xmlns = "http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns = "http://127.0.0.1:8001/wsdl"
+   xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
+   <types>
+       <schema targetNamespace = "http://example.com/stockquote.xsd"
+          xmlns = "http://www.w3.org/2000/10/XMLSchema">
+
+          <element name = "metarRequestElement">
+             <complexType>
+                <sequence>
+                  <element
+                    name="localidades"
+                    minOcurrs="1"
+                    type="string" />
+                  <element
+                    name="data_ini"
+                    type="string"
+                    minOccurs="0" />
+                  <element
+                    name="data_fim"
+                    type="string"
+                    minOccurs="0" />
+                  <element
+                    name="page_tam"
+                    type="string"
+                    minOccurs="0" />
+                </sequence>
+             </complexType>
+          </element>
+
+          <element
+            name="metarResponseElement">
+             <complexType>
+                <sequence>
+                  <element
+                    name="status"
+                    type="boolean" />
+                  <element
+                    name="message"
+                    type="integer" />
+                  <element
+                    name="data"
+                    maxOccurs="unbounded">
+                    <complexType>
+                      <sequence>
+                        <element
+                          name="current_page"
+                          type="integer" />
+                        <element
+                          name="data"
+                          maxOccurs="unbounded">
+                          <complexType>
+                            <sequence>
+                              <element
+                                name="id_localidade"
+                                type="string" />
+                              <element
+                                name="validade_inicial"
+                                type="string" />
+                              <element
+                                name="mens"
+                                type="string" />
+                              <element
+                                name="recebimento"
+                                type="string" />
+                            </sequence>
+                          </complexType>
+                        </element>
+                        <element
+                          name="first_page_url"
+                          type="string" />
+                        <element
+                          name="from"
+                          type="integer" />
+                        <element
+                          name="last_page"
+                          type="integer" />
+                        <element
+                          name="last_page_url"
+                          type="string" />
+                        <element
+                          name="next_page_url"
+                          type="string" />
+                        <element
+                          name="path"
+                          type="string" />
+                        <element
+                          name="per_page"
+                          type="integer" />
+                        <element
+                          name="prev_page_url"
+                          type="string" />
+                        <element
+                          name="to"
+                          type="integer" />
+                        <element
+                          name="total"
+                          type="integer" />
+                      </sequence>
+                    </complexType>
+                  </element>
+                </sequence>
+             </complexType>
+          </element>
+
+       </schema>
+    </types>
+
+   <message name = "MetarRequest">
+      <part name = "message" type = "tns:metarRequestElement"/>
+   </message>
+
+   <message name = "MetarResponse">
+      <part name = "message" type = "tns:metarResponseElement"/>
+   </message>
+
+   <portType name = "swimmet_portType">
+      <operation name = "metar">
+         <input message = "tns:MetarRequest"/>
+         <output message = "tns:MetarResponse"/>
+      </operation>
+   </portType>
+
+   <binding name = "swimmet_binding" type = "tns:swimmet_portType">
+      <soap:binding style = "document"
+         transport = "http://schemas.xmlsoap.org/soap/http"/>
+      <operation name = "metar">
+         <soap:operation
+           soapAction = "http://127.0.0.1:8001/soap/metar"/>
+         <input>
+            <soap:body
+               use = "literal"/>
+         </input>
+         <output>
+            <soap:body
+              use = "literal"/>
+         </output>
+      </operation>
+   </binding>
+
+   <service name = "SwimMet">
+      <port binding = "tns:swimmet_binding" name = "swimmet_port">
+         <soap:address
+            location = "http://127.0.0.1:8001/soap" />
+      </port>
+   </service>
+</definitions>
